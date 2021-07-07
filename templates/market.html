@@ -36,7 +36,28 @@
       </div>
     </nav>
     <h1>Welcome to Market Page</h1>
-
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <!-- Your Columns HERE -->
+                <th scope="col">ID</th>
+                <th scope="col">NAME</th>
+                <th scope="col">BARCODE</th>
+                <th scope="col">PRICE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Your rows inside the table HERE: -->
+            {% for dict_item in items %}
+            <tr>
+                <td>{{ dict_item.id }}</td>
+                <td>{{ dict_item.name }}</td>
+                <td>{{ dict_item.barcode }}</td>
+                <td>{{ dict_item.price}}$</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
