@@ -1,6 +1,6 @@
-from market import app
-from flask import render_template
-from market.models import SalableGood
+from market import app, app_db
+from flask import render_template, redirect, url_for
+from market.models import SalableGood, User
 from market.forms import RegisterForm
 
 
@@ -21,7 +21,14 @@ def market_page():
     return render_template("market.html", items=items)
 
 
-@app.route("/registration")
+@app.route("/registration", methods=["GET", "POST"])
 def register_page():
     registration_form = RegisterForm()
+    if registration_form.validate_on_submit():
+        user_to_create = User(username=registration_form.username.data,
+                              user_email=registration_form.email.data,
+                              user_pd=registration_form.pd.data)
+        app_db.session.add(user_to_create)
+        app_db.session.commit()
+        return redirect(url_for("market_page"))
     return render_template("register_page.html", form=registration_form)
