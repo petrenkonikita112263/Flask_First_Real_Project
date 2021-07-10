@@ -1,6 +1,7 @@
 from market import app
 from flask import render_template
 from market.models import SalableGood
+from market.forms import RegisterForm
 
 
 @app.route("/")
@@ -18,3 +19,9 @@ def market_page():
     #     {'id': 3, 'name': 'Keyboard', 'barcode': '231985128446', 'price': 150}
     # ]
     return render_template("market.html", items=items)
+
+
+@app.route("/registration")
+def register_page():
+    registration_form = RegisterForm()
+    return render_template("register_page.html", form=registration_form)
