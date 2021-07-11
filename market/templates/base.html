@@ -38,6 +38,23 @@
           </div>
       </nav>
       <!-- Future Content here -->
+        {# displaying error messages #}
+        {% with all_messages = get_flashed_messages(with_categories=true) %}
+            {% if all_messages %}
+                {% for category, message in all_messages %}
+                    <div class="alert alert-{{ category }}">
+                        <button type="button" class="m1-2 mb-1 close"
+                                data-dismiss="alert"
+                                aria-label="Close">
+                            <span aria-hidden="true">
+                                &times;
+                            </span>
+                        </button>
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         {% block body_content %}
 
         {% endblock %}
