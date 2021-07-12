@@ -24,6 +24,10 @@
             {{ form.confirm_pd.label().title() }}
             {{ form.confirm_pd(class="form-control", placeholder="Repeat the password one more time") }}
             <br>
+            <div class="checkbox mb-3">
+               <h6>Already has an account?</h6>
+               <a class="btn btn-sm btn-secondary" href="{{ url_for('log_in_page') }}">Sing In</a>
+            </div>
             {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
         </form>
     </div>

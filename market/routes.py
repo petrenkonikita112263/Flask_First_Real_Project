@@ -1,7 +1,7 @@
 from market import app, app_db
 from flask import render_template, redirect, url_for, flash, get_flashed_messages
 from market.models import SalableGood, User
-from market.forms import RegisterForm
+from market.forms import RegisterForm, LoginForm
 
 
 @app.route("/")
@@ -27,7 +27,7 @@ def register_page():
     if registration_form.validate_on_submit():
         user_to_create = User(username=registration_form.username.data,
                               user_email=registration_form.email.data,
-                              user_pd=registration_form.pd.data)
+                              password=registration_form.pd.data)
         app_db.session.add(user_to_create)
         app_db.session.commit()
         return redirect(url_for("market_page"))
@@ -35,3 +35,9 @@ def register_page():
         for e in registration_form.errors.values():
             flash(f"The error {e} was occurred during registration", category="danger")
     return render_template("register_page.html", form=registration_form)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def log_in_page():
+    login_form = LoginForm()
+    return render_template("login.html", form=login_form)

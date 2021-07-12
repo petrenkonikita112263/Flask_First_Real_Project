@@ -1,4 +1,5 @@
 from market import app_db
+from market import bcrypt
 
 
 class User(app_db.Model):
@@ -8,6 +9,14 @@ class User(app_db.Model):
     user_pd = app_db.Column(app_db.String(length=60), nullable=False)
     budget = app_db.Column(app_db.Integer(), nullable=False, default=1000)
     items = app_db.relationship("SalableGood", backref="owned_user", lazy=True)
+
+    @property
+    def password(self):
+        return self.user_pd
+
+    @password.setter
+    def password(self, value):
+        self.user_pd = bcrypt.generate_password_hash(value).decode("utf-8")
 
 
 class SalableGood(app_db.Model):
