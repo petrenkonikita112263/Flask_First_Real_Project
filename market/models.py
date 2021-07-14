@@ -25,6 +25,13 @@ class User(app_db.Model, UserMixin):
     def password(self, value):
         self.user_pd = bcrypt.generate_password_hash(value).decode("utf-8")
 
+    @property
+    def budget_prettify(self):
+        if (len(str(self.budget))) >= 4:
+            return "{:,.2f}$".format(self.budget)
+        else:
+            return f"{self.budget}$"
+
     def check_password(self, input_password):
         return bcrypt.check_password_hash(self.user_pd, input_password)
 
