@@ -1,5 +1,6 @@
 from market import app, app_db
 from flask import render_template, redirect, url_for, flash, get_flashed_messages
+from flask_login import login_user
 from market.models import SalableGood, User
 from market.forms import RegisterForm, LoginForm
 
@@ -40,4 +41,12 @@ def register_page():
 @app.route("/login", methods=["GET", "POST"])
 def log_in_page():
     login_form = LoginForm()
+    if login_form.validate_on_submit():
+        visited_user = User.query.filter_by(username=login_form.username.data).first()
+        if visited_user and visited_user.check_password(input_password=login_form.password.data):
+            login_user(visited_user)
+            flash(f"Successfully Log In Operation. Hello {visited_user.username}", category="success")
+            return redirect(url_for("market_page"))
+        else:
+            flash("Unfortunately the input data isn't matched with stored in DB", category="danger")
     return render_template("login.html", form=login_form)

@@ -1,8 +1,15 @@
-from market import app_db
+from flask_login import UserMixin
+
+from market import app_db, app
 from market import bcrypt
 
 
-class User(app_db.Model):
+@app.login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+class User(app_db.Model, UserMixin):
     id = app_db.Column(app_db.Integer(), primary_key=True)
     username = app_db.Column(app_db.String(length=30), nullable=False, unique=True)
     user_email = app_db.Column(app_db.String(length=50), nullable=False, unique=True)
@@ -17,6 +24,9 @@ class User(app_db.Model):
     @password.setter
     def password(self, value):
         self.user_pd = bcrypt.generate_password_hash(value).decode("utf-8")
+
+    def check_password(self, input_password):
+        return bcrypt.check_password_hash(self.user_pd, input_password)
 
 
 class SalableGood(app_db.Model):
