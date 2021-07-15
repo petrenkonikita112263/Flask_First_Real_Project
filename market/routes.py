@@ -60,3 +60,8 @@ def log_out_page():
     logout_user()
     flash("You have successfully logged out! Thanks for visiting.", category="info")
     return redirect(url_for("home_page"))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404

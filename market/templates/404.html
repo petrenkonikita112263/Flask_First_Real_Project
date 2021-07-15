@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title_page %}
+    404 Bad Page
+{% endblock %}
+{% block body_content %}
+    <div>
+        <h1 style="color: red; align-content: center">
+            Sorry, we couldn't find that page.
+        </h1>
+        <h1>
+            <a style="color: blue" href="{{url_for('home_page')}}">Go to Main page</a>
+        </h1>
+    </div>
+{% endblock %}
