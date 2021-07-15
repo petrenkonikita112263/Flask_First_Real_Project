@@ -1,6 +1,6 @@
 from market import app, app_db
 from flask import render_template, redirect, url_for, flash, get_flashed_messages
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from market.models import SalableGood, User
 from market.forms import RegisterForm, LoginForm
 
@@ -50,3 +50,10 @@ def log_in_page():
         else:
             flash("Unfortunately the input data isn't matched with stored in DB", category="danger")
     return render_template("login.html", form=login_form)
+
+
+@app.route("/logout")
+def log_out_page():
+    logout_user()
+    flash("You have successfully logged out! Thanks for visiting.", category="info")
+    return redirect(url_for("home_page"))
