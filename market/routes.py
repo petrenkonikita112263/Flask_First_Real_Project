@@ -1,6 +1,6 @@
 from market import app, app_db
 from flask import render_template, redirect, url_for, flash, get_flashed_messages
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from market.models import SalableGood, User
 from market.forms import RegisterForm, LoginForm
 
@@ -12,6 +12,7 @@ def home_page():
 
 
 @app.route("/market")
+@login_required
 def market_page():
     items = SalableGood.query.all()
     # items = [
