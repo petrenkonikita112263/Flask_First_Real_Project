@@ -10,6 +10,6 @@ app_db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_mamanger = LoginManager(app)
 login_mamanger.login_view = "log_in_page"
-login_mamanger.login_message_category = "info"  
+login_mamanger.login_message_category = "info"
 
 from market import routes

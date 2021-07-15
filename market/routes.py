@@ -32,6 +32,8 @@ def register_page():
                               password=registration_form.pd.data)
         app_db.session.add(user_to_create)
         app_db.session.commit()
+        login_user(user_to_create)
+        flash(f"Successfully created account. You're log in as {user_to_create.username}", category="success")
         return redirect(url_for("market_page"))
     if registration_form.errors != {}:
         for e in registration_form.errors.values():
