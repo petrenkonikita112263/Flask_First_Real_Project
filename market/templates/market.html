@@ -3,36 +3,52 @@
     Market Page
 {% endblock %}
 {% block body_content %}
+{% include "additional_files/items_modals.html" %}
     <h1>Welcome to Market Page</h1>
-    <table class="table table-hover table-dark">
-        <thead>
-            <tr>
-                <!-- Your Columns HERE -->
-                <th scope="col">ID</th>
-                <th scope="col">NAME</th>
-                <th scope="col">BARCODE</th>
-                <th scope="col">PRICE</th>
-                <th scope="col">OPTIONS</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Your rows inside the table HERE: -->
-            {% for dict_item in items %}
-            <tr>
-                <td>{{ dict_item.id }}</td>
-                <td>{{ dict_item.name }}</td>
-                <td>{{ dict_item.barcode }}</td>
-                <td>{{ dict_item.price }}$</td>
-                <td>
-                    <button class="btn btn-outline btn-info">
-                        Additional Info
-                    </button>
-                    <button class="btn btn-outline btn-success">
-                        Buy
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="row" style="margin-top: 20px; margin-left: 20px">
+        <div class="col-8">
+            <h2>Available Items</h2>
+            <br>
+            <table class="table table-hover table-dark">
+                <thead>
+                <tr>
+                    <!-- Your Columns HERE -->
+                    <th scope="col">ID</th>
+                    <th scope="col">NAME</th>
+                    <th scope="col">BARCODE</th>
+                    <th scope="col">PRICE</th>
+                    <th scope="col">OPTIONS</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Your rows inside the table HERE: -->
+                {% for dict_item in items %}
+                {% include "additional_files/items_modals.html" %}
+                    <tr>
+                        <td>{{ dict_item.id }}</td>
+                        <td>{{ dict_item.name }}</td>
+                        <td>{{ dict_item.barcode }}</td>
+                        <td>{{ dict_item.price }}$</td>
+                        <td>
+                            <button class="btn btn-outline btn-info"
+                            data-toggle="modal"
+                            data-target="#Modal-Info-{{ item.id }}">
+                                Additional Info
+                            </button>
+                            <button class="btn btn-outline btn-success"
+                            data-toggle="modal"
+                            data-target="#Modal-Buy-{{ item.id }}">
+                                Buy
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <h2>Owned Items</h2>
+            <br>
+        </div>
+    </div>
 {% endblock %}
