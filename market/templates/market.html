@@ -3,7 +3,6 @@
     Market Page
 {% endblock %}
 {% block body_content %}
-{% include "additional_files/items_modals.html" %}
     <h1>Welcome to Market Page</h1>
     <div class="row" style="margin-top: 20px; margin-left: 20px">
         <div class="col-8">
@@ -32,12 +31,12 @@
                         <td>
                             <button class="btn btn-outline btn-info"
                             data-toggle="modal"
-                            data-target="#Modal-Info-{{ item.id }}">
+                            data-target="#Modal-Info-{{ dict_item.id }}">
                                 Additional Info
                             </button>
                             <button class="btn btn-outline btn-success"
                             data-toggle="modal"
-                            data-target="#Modal-Buy-{{ item.id }}">
+                            data-target="#Modal-Buy-{{ dict_item.id }}">
                                 Buy
                             </button>
                         </td>
