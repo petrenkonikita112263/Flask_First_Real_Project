@@ -5,14 +5,14 @@
 </style>
 
 <!-- Additional Info -->
-<div class="modal fade" id="Modal-Info-{{ item.id }}"
+<div class="modal fade" id="Modal-Info-{{ dict_item.id }}"
      tabindex="-1"
      aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabel">
-                    {{ item.name }}
+                    {{ dict_item.name }}
                 </h5>
                 <button type="button" class="close"
                         data-dismiss="modal" aria-label="Close">
@@ -20,7 +20,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                {{ item.description }}
+                {{ dict_item.description }}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
@@ -32,14 +32,14 @@
 </div>
 
 <!-- Buy Item -->
-<div class="modal fade" id="Modal-Buy-{{ item.id }}"
+<div class="modal fade" id="Modal-Buy-{{ dict_item.id }}"
      tabindex="-1"
      aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabel">
-                    {{ item.name }}
+                    {{ dict_item.name }}
                 </h5>
                 <button type="button" class="close"
                         data-dismiss="modal" aria-label="Close">
@@ -47,7 +47,17 @@
                 </button>
             </div>
             <div class="modal-body">
-                Would you like to purchase {{ item.price }}$ for {{ item.name }} ?
+                <form method="POST">
+                    {{ bought_item_form.hidden_tag() }}
+                    <h4 class="text-center">
+                        Would you like to purchase {{ dict_item.price }}$ for {{ dict_item.name }}?
+                    </h4>
+                    <h6 class="text-center">
+                        Click 'Buy' to buy the selected item
+                    </h6>
+                    <input id="buy_item" name="buy_item" type="hidden" value="{{ dict_item.name }}">
+                    {{ bought_item_form.submit(class="btn btn-outline-success btn-block") }}
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"

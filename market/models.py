@@ -35,6 +35,9 @@ class User(app_db.Model, UserMixin):
     def check_password(self, input_password):
         return bcrypt.check_password_hash(self.user_pd, input_password)
 
+    def has_enough_money(self, item_object):
+        return self.budget >= item_object.price
+
 
 class SalableGood(app_db.Model):
     id = app_db.Column(app_db.Integer(), primary_key=True)
@@ -43,6 +46,11 @@ class SalableGood(app_db.Model):
     barcode = app_db.Column(app_db.String(length=12), nullable=False, unique=True)
     description = app_db.Column(app_db.String(length=1024), nullable=False, unique=True)
     owner = app_db.Column(app_db.Integer(), app_db.ForeignKey("user.id"))
+
+    def own_item(self, customer):
+        self.owner = customer.id
+        self.budget -= self.price
+        app_db.session.commit()
 
     def __repr__(self):
         return f"SalableGood {self.name}"

@@ -1,8 +1,8 @@
 from market import app, app_db
-from flask import render_template, redirect, url_for, flash, get_flashed_messages
-from flask_login import login_user, logout_user, login_required
+from flask import render_template, redirect, url_for, flash, get_flashed_messages, request
+from flask_login import login_user, logout_user, login_required, current_user
 from market.models import SalableGood, User
-from market.forms import RegisterForm, LoginForm
+from market.forms import RegisterForm, LoginForm, BoughtItemForm
 
 
 @app.route("/")
@@ -11,16 +11,29 @@ def home_page():
     return render_template("home.html")
 
 
-@app.route("/market")
+@app.route("/market", methods=["GET", "POST"])
 @login_required
 def market_page():
-    items = SalableGood.query.all()
+    bought_item_form = BoughtItemForm()
+    if request.method == "POST":
+        bought_item = request.form.get("buy_item")
+        item_object = SalableGood.query.filter_by(name=bought_item).first()
+        if item_object:
+            if current_user.has_enough_money(item_object):
+                item_object.own_item(current_user)
+                flash(f"Successfully bought {item_object.name}", category="success")
+            else:
+                flash(f"Unfortunately there's no enough money to buy {item_object.name}. "
+                      f"Please add some money to your budget", category="danger")
+        return redirect(url_for("market_page"))
+    if request.method == "GET":
+        items = SalableGood.query.filter_by(owner=None)
     # items = [
     #     {'id': 1, 'name': 'Phone', 'barcode': '893212299897', 'price': 500},
     #     {'id': 2, 'name': 'Laptop', 'barcode': '123985473165', 'price': 900},
     #     {'id': 3, 'name': 'Keyboard', 'barcode': '231985128446', 'price': 150}
     # ]
-    return render_template("market.html", items=items)
+        return render_template("market.html", items=items, bought_item_form=bought_item_form)
 
 
 @app.route("/registration", methods=["GET", "POST"])
