@@ -38,6 +38,9 @@ class User(app_db.Model, UserMixin):
     def has_enough_money(self, item_object):
         return self.budget >= item_object.price
 
+    def has_bought_item(self, item_object):
+        return item_object in self.items
+
 
 class SalableGood(app_db.Model):
     id = app_db.Column(app_db.Integer(), primary_key=True)
@@ -49,7 +52,12 @@ class SalableGood(app_db.Model):
 
     def own_item(self, customer):
         self.owner = customer.id
-        self.budget -= self.price
+        customer.budget -= self.price
+        app_db.session.commit()
+
+    def discard_item(self, customer):
+        self.owner = None
+        customer.budget += self.price
         app_db.session.commit()
 
     def __repr__(self):

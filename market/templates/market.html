@@ -22,7 +22,7 @@
                 <tbody>
                 <!-- Your rows inside the table HERE: -->
                 {% for dict_item in items %}
-                {% include "additional_files/items_modals.html" %}
+                    {% include "additional_files/items_modals.html" %}
                     <tr>
                         <td>{{ dict_item.id }}</td>
                         <td>{{ dict_item.name }}</td>
@@ -30,13 +30,13 @@
                         <td>{{ dict_item.price }}$</td>
                         <td>
                             <button class="btn btn-outline btn-info"
-                            data-toggle="modal"
-                            data-target="#Modal-Info-{{ dict_item.id }}">
+                                    data-toggle="modal"
+                                    data-target="#Modal-Info-{{ dict_item.id }}">
                                 Additional Info
                             </button>
                             <button class="btn btn-outline btn-success"
-                            data-toggle="modal"
-                            data-target="#Modal-Buy-{{ dict_item.id }}">
+                                    data-toggle="modal"
+                                    data-target="#Modal-Buy-{{ dict_item.id }}">
                                 Buy
                             </button>
                         </td>
@@ -48,6 +48,23 @@
         <div class="col-4">
             <h2>Owned Items</h2>
             <br>
+            <div class="row">
+                {% for bought_item in user_items %}
+                {% include "additional_files/owned_items_modals.html" %}
+                    <div class="col-md-6">
+                        <div style="margin-bottom: 5px" class="card text-center bg-dark">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ bought_item.name }}</h5>
+                                <button type="button" class="btn btn-outline-danger" style="margin-bottom: 5px"
+                                        data-toggle="modal" data-target="#Modal-Discard-{{ bought_item.id }}">
+                                    Discard
+                                </button>
+                                <p class="card-text"><strong>The item costs {{ bought_item.price }}$</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

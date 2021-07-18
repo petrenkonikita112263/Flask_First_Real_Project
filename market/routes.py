@@ -2,7 +2,7 @@ from market import app, app_db
 from flask import render_template, redirect, url_for, flash, get_flashed_messages, request
 from flask_login import login_user, logout_user, login_required, current_user
 from market.models import SalableGood, User
-from market.forms import RegisterForm, LoginForm, BoughtItemForm
+from market.forms import RegisterForm, LoginForm, BoughtItemForm, SoldItemForm
 
 
 @app.route("/")
@@ -15,7 +15,9 @@ def home_page():
 @login_required
 def market_page():
     bought_item_form = BoughtItemForm()
+    sold_item_form = SoldItemForm()
     if request.method == "POST":
+        # buy item
         bought_item = request.form.get("buy_item")
         item_object = SalableGood.query.filter_by(name=bought_item).first()
         if item_object:
@@ -25,15 +27,27 @@ def market_page():
             else:
                 flash(f"Unfortunately there's no enough money to buy {item_object.name}. "
                       f"Please add some money to your budget", category="danger")
+        # discard bought item
+        sold_item = request.form.get("sold_item")
+        sold_item_object = SalableGood.query.filter_by(name=sold_item).first()
+        if sold_item_object:
+            if current_user.has_bought_item(sold_item_object):
+                sold_item_object.discard_item(current_user)
+                flash(f"Successfully discard the bought operation. "
+                      f"The item {sold_item_object.name} is removed from your basket", category="success")
+            else:
+                flash(f"Unfortunately, you didn't buy {sold_item_object.name}.", category="danger")
         return redirect(url_for("market_page"))
     if request.method == "GET":
         items = SalableGood.query.filter_by(owner=None)
+        user_items = SalableGood.query.filter_by(owner=current_user.id)
     # items = [
     #     {'id': 1, 'name': 'Phone', 'barcode': '893212299897', 'price': 500},
     #     {'id': 2, 'name': 'Laptop', 'barcode': '123985473165', 'price': 900},
     #     {'id': 3, 'name': 'Keyboard', 'barcode': '231985128446', 'price': 150}
     # ]
-        return render_template("market.html", items=items, bought_item_form=bought_item_form)
+        return render_template("market.html", items=items, bought_item_form=bought_item_form,
+                               user_items=user_items, sold_item_form=sold_item_form)
 
 
 @app.route("/registration", methods=["GET", "POST"])
