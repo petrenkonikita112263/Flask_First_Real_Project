@@ -1,8 +1,9 @@
-from market import app, app_db
-from flask import render_template, redirect, url_for, flash, get_flashed_messages, request
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
-from market.models import SalableGood, User
+
+from market import app, app_db
 from market.forms import RegisterForm, LoginForm, BoughtItemForm, SoldItemForm
+from market.models import SalableGood, User
 
 
 @app.route("/")
@@ -41,11 +42,6 @@ def market_page():
     if request.method == "GET":
         items = SalableGood.query.filter_by(owner=None)
         user_items = SalableGood.query.filter_by(owner=current_user.id)
-    # items = [
-    #     {'id': 1, 'name': 'Phone', 'barcode': '893212299897', 'price': 500},
-    #     {'id': 2, 'name': 'Laptop', 'barcode': '123985473165', 'price': 900},
-    #     {'id': 3, 'name': 'Keyboard', 'barcode': '231985128446', 'price': 150}
-    # ]
         return render_template("market.html", items=items, bought_item_form=bought_item_form,
                                user_items=user_items, sold_item_form=sold_item_form)
 
